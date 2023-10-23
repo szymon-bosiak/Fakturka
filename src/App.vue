@@ -14,7 +14,11 @@
       ></i>
     </nav>
 
-    <sellersInfoForm v-if="editProfile" @close="viewProfileEdit()" @update-preview="" />
+    <sellersInfoForm
+      v-if="editProfile"
+      @close="viewProfileEdit()"
+      @update-preview="updatePreview"
+    />
 
     <div class="max-h-[910px] flex-auto">
       <div class="grid h-full grid-cols-2 grid-rows-1">
@@ -73,6 +77,17 @@
           :method="method"
           :deadline="deadline"
           :formData="formData"
+          v-model:sellerIdStored="sellerIdStored"
+          v-model:sellerNipStored="sellerNipStored"
+          v-model:sellerStreetStored="sellerStreetStored"
+          v-model:sellerPostalStored="sellerPostalStored"
+          v-model:sellerCityStored="sellerCityStored"
+          v-model:bankStored="bankStored"
+          v-model:bankAccountStored="bankAccountStored"
+          v-model:phoneStored="phoneStored"
+          v-model:emailStored="emailStored"
+          v-model:websiteStored="websiteStored"
+          v-model:imageSrcStored="imageSrcStored"
         />
       </div>
     </div>
@@ -99,6 +114,50 @@ const city = ref();
 const method = ref();
 const deadline = ref();
 const formData = ref([]);
+const sellerIdStored = ref();
+const sellerNipStored = ref();
+const sellerStreetStored = ref();
+const sellerPostalStored = ref();
+const sellerCityStored = ref();
+const bankStored = ref();
+const bankAccountStored = ref();
+const phoneStored = ref();
+const emailStored = ref();
+const websiteStored = ref();
+const imageSrcStored = ref();
+
+if (localStorage.getItem("image") !== null) {
+  imageSrcStored.value = localStorage.getItem("image");
+}
+
+if (localStorage.getItem("sellerInfo") !== null) {
+  let storedValues = JSON.parse(localStorage.getItem("sellerInfo"));
+  sellerIdStored.value = storedValues.sellerId._value;
+  sellerNipStored.value = storedValues.sellerNip._value;
+  sellerStreetStored.value = storedValues.sellerStreet._value;
+  sellerPostalStored.value = storedValues.sellerPostal._value;
+  sellerCityStored.value = storedValues.sellerCity._value;
+  bankStored.value = storedValues.bank._value;
+  bankAccountStored.value = storedValues.bankAccount._value;
+  phoneStored.value = storedValues.phone._value;
+  emailStored.value = storedValues.email._value;
+  websiteStored.value = storedValues.website._value;
+}
+
+const updatePreview = () => {
+  let refreshedValues = JSON.parse(localStorage.getItem("sellerInfo"));
+  sellerIdStored.value = refreshedValues.sellerId._value;
+  sellerNipStored.value = refreshedValues.sellerNip._value;
+  sellerStreetStored.value = refreshedValues.sellerStreet._value;
+  sellerPostalStored.value = refreshedValues.sellerPostal._value;
+  sellerCityStored.value = refreshedValues.sellerCity._value;
+  bankStored.value = refreshedValues.bank._value;
+  bankAccountStored.value = refreshedValues.bankAccount._value;
+  phoneStored.value = refreshedValues.phone._value;
+  emailStored.value = refreshedValues.email._value;
+  websiteStored.value = refreshedValues.website._value;
+  imageSrcStored.value = localStorage.getItem("image");
+};
 
 const remove = () => {
   formData.value.pop();

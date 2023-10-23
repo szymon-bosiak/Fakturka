@@ -127,7 +127,7 @@
                     type="file"
                     id="logo"
                   />
-                  <div class="mt-3" v-if="imageSrc">
+                  <div class="mt-3" :class="{'opacity-0': !imageSrc}">
                     <p>Podgląd pliku</p>
                     <div
                       id="imgPreview"
@@ -154,8 +154,8 @@
       </div>
       <div class="absolute right-16 mx-8 flex justify-end">
         <button
-          @click="saveSellerInfo, $emit('updatePreview')"
-          class="relative right-12 bottom-2 h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
+          @click="saveSellerInfo(), $emit('updatePreview')"
+          class="relative bottom-2 right-6 h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
         >
           Zapisz dane
         </button>
@@ -207,6 +207,11 @@ if (localStorage.getItem("sellerInfo") !== null) {
   website.value = storedValues.website._value;
 }
 
+const saveSellerInfo = () => {
+  localStorage.setItem("sellerInfo", JSON.stringify(values));
+  
+};
+
 const imageSrc = ref();
 
 if (localStorage.getItem("image") !== null) {
@@ -224,7 +229,5 @@ const saveImage = (event) => {
   };
 };
 
-const saveSellerInfo = () => {
-  localStorage.setItem("sellerInfo", JSON.stringify(values));
-};
+
 </script>
