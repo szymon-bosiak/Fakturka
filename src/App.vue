@@ -3,9 +3,9 @@
     <nav
       class="flex h-16 w-full items-center justify-between bg-accent-1 px-10"
     >
-      <div class="flex text-white">
+      <div class="flex text-white items-center">
+        <img class="invert w-10 h-10 mr-2" src="./assets/logo.svg" alt="Fakturka's logo">
         <p class="">Fakurka</p>
-        <p class="text-xs">©</p>
       </div>
       <i
         @click="viewProfileEdit()"
@@ -135,7 +135,7 @@ const imageSrcStored = ref();
 
 let opt = {
   margin: 0,
-  html2canvas: { scale: 5, height: 833, width: 591 },
+  html2canvas: { scale: 5, height: 833, width: 589 },
   jsPDF: { unit: "mm", format: "a4", orientation: "p" },
 };
 

@@ -3,7 +3,7 @@
     class="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center backdrop-blur-sm"
   >
     <div
-      class="h-5/6 w-5/6 max-w-[800px] rounded-2xl bg-grey-light outline outline-2 outline-grey-mid"
+      class="h-5/6 w-5/6 max-w-[800px] rounded-2xl bg-white shadow-2xl outline outline-2 outline-grey-mid"
     >
       <div class="flex justify-end">
         <div

@@ -278,12 +278,14 @@
       @click="$emit('exportDoc')"
       class="mr-6 rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
     >
+    <i class="fa-solid fa-floppy-disk -translate-x-1"></i>
       Zapisz
     </button>
     <button
       @click="$emit('printDoc')"
       class="rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
     >
+      <i class="fa-solid fa-print -translate-x-1"></i>
       Drukuj
     </button>
   </div>
