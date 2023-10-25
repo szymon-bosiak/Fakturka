@@ -45,9 +45,11 @@
             <div class="w-full max-w-[780px]">
               <InvoiceForm
                 v-if="changeView"
-                @entered-date="formatDate"
+                @print-doc="printDoc()"
+                @export-doc="exportDoc()"
+                @entered-date="formatDate()"
                 @remove="remove()"
-                @add-more="addMore"
+                @add-more="addMore()"
                 v-model:invoiceId="invoiceId"
                 v-model:invoicePlace="invoicePlace"
                 v-model:invoiceDateOf="invoiceDateOf"
@@ -65,30 +67,38 @@
           </div>
         </div>
 
-        <DocumentPreview
-          :invoiceId="invoiceId"
-          :invoicePlace="invoicePlace"
-          :formatedDate="formatedDate"
-          :payerId="payerId"
-          :nip="nip"
-          :street="street"
-          :postal="postal"
-          :city="city"
-          :method="method"
-          :deadline="deadline"
-          :formData="formData"
-          v-model:sellerIdStored="sellerIdStored"
-          v-model:sellerNipStored="sellerNipStored"
-          v-model:sellerStreetStored="sellerStreetStored"
-          v-model:sellerPostalStored="sellerPostalStored"
-          v-model:sellerCityStored="sellerCityStored"
-          v-model:bankStored="bankStored"
-          v-model:bankAccountStored="bankAccountStored"
-          v-model:phoneStored="phoneStored"
-          v-model:emailStored="emailStored"
-          v-model:websiteStored="websiteStored"
-          v-model:imageSrcStored="imageSrcStored"
-        />
+        <div class="w-full flex justify-center">
+          <div
+            class="m-8 flex aspect-A4 h-[833px] justify-center bg-background"
+          >
+          
+            <DocumentPreview
+              id="element-to-PDF"
+              :invoiceId="invoiceId"
+              :invoicePlace="invoicePlace"
+              :formatedDate="formatedDate"
+              :payerId="payerId"
+              :nip="nip"
+              :street="street"
+              :postal="postal"
+              :city="city"
+              :method="method"
+              :deadline="deadline"
+              :formData="formData"
+              :sellerIdStored="sellerIdStored"
+              :sellerNipStored="sellerNipStored"
+              :sellerStreetStored="sellerStreetStored"
+              :sellerPostalStored="sellerPostalStored"
+              :sellerCityStored="sellerCityStored"
+              :bankStored="bankStored"
+              :bankAccountStored="bankAccountStored"
+              :phoneStored="phoneStored"
+              :websiteStored="websiteStored"
+              :emailStored="emailStored"
+              :imageSrcStored="imageSrcStored"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -125,6 +135,29 @@ const phoneStored = ref();
 const emailStored = ref();
 const websiteStored = ref();
 const imageSrcStored = ref();
+
+let opt = {
+  margin: 0,
+  html2canvas: { scale: 5, height: 833 },
+  jsPDF: { unit: "mm", format: "a4", orientation: "p" },
+};
+
+const printDoc = () => {
+  html2pdf()
+    .set(opt)
+    .from(document.getElementById("element-to-PDF"))
+    .toPdf()
+    .get("pdf")
+    .then(function (pdfObj) {
+      pdfObj.autoPrint();
+      window.open(pdfObj.output("bloburl"), "_blank");
+    });
+};
+
+const exportDoc = () => {
+  console.log(invoiceId.value);
+  html2pdf().set(opt).from(document.getElementById("element-to-PDF")).save();
+};
 
 if (localStorage.getItem("image") !== null) {
   imageSrcStored.value = localStorage.getItem("image");

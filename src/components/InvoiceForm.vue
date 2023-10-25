@@ -275,11 +275,13 @@
 
   <div class="mx-6 flex justify-end">
     <button
+      @click="$emit('exportDoc')"
       class="mr-6 rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
     >
       Zapisz
     </button>
     <button
+      @click="$emit('printDoc')"
       class="rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
     >
       Drukuj
@@ -289,6 +291,8 @@
 
 <script setup>
 defineEmits([
+  "printDoc",
+  "exportDoc",
   "enteredDate",
   "remove",
   "addMore",

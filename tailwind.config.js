@@ -6,7 +6,11 @@ module.exports = {
       colors: {
         "accent-1": "#0C1117",
         "pale-blue": "#e6f1ff",
-        background: "#F1F2F3",
+        background: "#CFCFCF",
+        "grey-light": "#E7E7E9",
+        "grey-mid": "#D2D3D5",
+        "grey-dark": "#3B3B3D",
+        "red-accent": "#C81E1E",
       },
       aspectRatio: {
         A4: "1 / 1.41",

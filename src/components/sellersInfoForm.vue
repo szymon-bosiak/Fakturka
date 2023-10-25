@@ -127,7 +127,7 @@
                     type="file"
                     id="logo"
                   />
-                  <div class="mt-3" :class="{'opacity-0': !imageSrc}">
+                  <div class="mt-3" :class="{ 'opacity-0': !imageSrc }">
                     <p>Podgląd pliku</p>
                     <div
                       id="imgPreview"
@@ -152,10 +152,10 @@
           </div>
         </form>
       </div>
-      <div class="absolute right-16 mx-8 flex justify-end">
+      <div class="flex w-full justify-end px-7">
         <button
           @click="saveSellerInfo(), $emit('updatePreview')"
-          class="relative bottom-2 right-6 h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
+          class="relative bottom-2 h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
         >
           Zapisz dane
         </button>
@@ -209,7 +209,6 @@ if (localStorage.getItem("sellerInfo") !== null) {
 
 const saveSellerInfo = () => {
   localStorage.setItem("sellerInfo", JSON.stringify(values));
-  
 };
 
 const imageSrc = ref();
@@ -228,6 +227,4 @@ const saveImage = (event) => {
     imageSrc.value = localStorage.getItem("image");
   };
 };
-
-
 </script>
