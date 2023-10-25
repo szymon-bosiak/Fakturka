@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col justify-center bg-background">
+  <div class="flex h-screen flex-col bg-background">
     <nav
       class="flex h-16 w-full items-center justify-between bg-accent-1 px-10"
     >
@@ -20,84 +20,81 @@
       @update-preview="updatePreview"
     />
 
-    <div class="max-h-[910px] flex-auto">
-      <div class="grid h-full grid-cols-2 grid-rows-1">
-        <div class="w-full bg-white">
-          <nav class="my-5 flex justify-center">
-            <button
-              @click="changeView = true"
-              class="mr-8 rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
-              :class="{ 'bg-blue-500 text-white': changeView === true }"
-              to="/"
-            >
-              Wystaw fakturę
-            </button>
-            <button
-              @click="changeView = false"
-              class="rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
-              :class="{ 'bg-blue-500 text-white': changeView === false }"
-            >
-              Dodaj podmiot
-            </button>
-          </nav>
+    <div class="grid h-full grid-cols-2 grid-rows-1">
+      <div class="w-full min-w-[600px] bg-white">
+        <nav class="my-5 flex justify-center">
+          <button
+            @click="changeView = true"
+            class="mr-8 rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
+            :class="{ 'bg-blue-500 text-white': changeView === true }"
+            to="/"
+          >
+            Wystaw fakturę
+          </button>
+          <button
+            @click="changeView = false"
+            class="rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
+            :class="{ 'bg-blue-500 text-white': changeView === false }"
+          >
+            Dodaj podmiot
+          </button>
+        </nav>
 
-          <div class="flex justify-center">
-            <div class="w-full max-w-[780px]">
-              <InvoiceForm
-                v-if="changeView"
-                @print-doc="printDoc()"
-                @export-doc="exportDoc()"
-                @entered-date="formatDate()"
-                @remove="remove()"
-                @add-more="addMore()"
-                v-model:invoiceId="invoiceId"
-                v-model:invoicePlace="invoicePlace"
-                v-model:invoiceDateOf="invoiceDateOf"
-                v-model:payerId="payerId"
-                v-model:nip="nip"
-                v-model:street="street"
-                v-model:postal="postal"
-                v-model:city="city"
-                v-model:method="method"
-                v-model:deadline="deadline"
-                v-model:formData="formData"
-              />
-              <BillingData v-else />
-            </div>
+        <div class="flex justify-center">
+          <div class="w-full max-w-[780px]">
+            <InvoiceForm
+              v-if="changeView"
+              @print-doc="printDoc()"
+              @export-doc="exportDoc()"
+              @entered-date="formatDate()"
+              @remove="remove()"
+              @add-more="addMore()"
+              v-model:invoiceId="invoiceId"
+              v-model:invoicePlace="invoicePlace"
+              v-model:invoiceDateOf="invoiceDateOf"
+              v-model:payerId="payerId"
+              v-model:nip="nip"
+              v-model:street="street"
+              v-model:postal="postal"
+              v-model:city="city"
+              v-model:method="method"
+              v-model:deadline="deadline"
+              v-model:formData="formData"
+            />
+            <BillingData v-else />
           </div>
         </div>
+      </div>
 
-        <div class="w-full flex justify-center">
-          <div
-            class="m-8 flex aspect-A4 h-[833px] justify-center bg-background"
-          >
-          
-            <DocumentPreview
-              id="element-to-PDF"
-              :invoiceId="invoiceId"
-              :invoicePlace="invoicePlace"
-              :formatedDate="formatedDate"
-              :payerId="payerId"
-              :nip="nip"
-              :street="street"
-              :postal="postal"
-              :city="city"
-              :method="method"
-              :deadline="deadline"
-              :formData="formData"
-              :sellerIdStored="sellerIdStored"
-              :sellerNipStored="sellerNipStored"
-              :sellerStreetStored="sellerStreetStored"
-              :sellerPostalStored="sellerPostalStored"
-              :sellerCityStored="sellerCityStored"
-              :bankStored="bankStored"
-              :bankAccountStored="bankAccountStored"
-              :phoneStored="phoneStored"
-              :websiteStored="websiteStored"
-              :emailStored="emailStored"
-              :imageSrcStored="imageSrcStored"
-            />
-          </div>
+      <div class="flex items-center">
+        <div
+          class="m-8 flex flex-auto items-center justify-center bg-background"
+        >
+          <DocumentPreview
+            id="element-to-PDF"
+            :invoiceId="invoiceId"
+            :invoicePlace="invoicePlace"
+            :formatedDate="formatedDate"
+            :payerId="payerId"
+            :nip="nip"
+            :street="street"
+            :postal="postal"
+            :city="city"
+            :method="method"
+            :deadline="deadline"
+            :formData="formData"
+            :sellerIdStored="sellerIdStored"
+            :sellerNipStored="sellerNipStored"
+            :sellerStreetStored="sellerStreetStored"
+            :sellerPostalStored="sellerPostalStored"
+            :sellerCityStored="sellerCityStored"
+            :bankStored="bankStored"
+            :bankAccountStored="bankAccountStored"
+            :phoneStored="phoneStored"
+            :websiteStored="websiteStored"
+            :emailStored="emailStored"
+            :imageSrcStored="imageSrcStored"
+          />
         </div>
       </div>
     </div>
@@ -138,7 +135,7 @@ const imageSrcStored = ref();
 
 let opt = {
   margin: 0,
-  html2canvas: { scale: 5, height: 833 },
+  html2canvas: { scale: 5, height: 833, width: 591 },
   jsPDF: { unit: "mm", format: "a4", orientation: "p" },
 };
 

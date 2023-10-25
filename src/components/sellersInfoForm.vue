@@ -3,12 +3,12 @@
     class="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center backdrop-blur-sm"
   >
     <div
-      class="h-5/6 w-5/6 max-w-[800px] rounded-2xl bg-pale-blue outline outline-2 outline-gray-300"
+      class="h-5/6 w-5/6 max-w-[800px] rounded-2xl bg-grey-light outline outline-2 outline-grey-mid"
     >
       <div class="flex justify-end">
         <div
           @click="$emit('close')"
-          class="m-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-800 transition hover:scale-105 hover:brightness-110"
+          class="m-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-accent transition hover:scale-105 hover:brightness-110"
         >
           <i class="fa-solid fa-xmark text-xl text-white"></i>
         </div>

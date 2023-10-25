@@ -160,7 +160,7 @@
               class="absolute right-2 top-2 cursor-pointer hover:scale-110 hover:brightness-125"
             >
               <div
-                class="flex h-4 w-4 items-center justify-center rounded-full bg-red-800"
+                class="flex h-4 w-4 items-center justify-center rounded-full bg-red-accent"
               >
                 <i class="fa-solid fa-minus text-sm text-white"></i>
               </div>

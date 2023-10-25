@@ -12,9 +12,6 @@ module.exports = {
         "grey-dark": "#3B3B3D",
         "red-accent": "#C81E1E",
       },
-      aspectRatio: {
-        A4: "1 / 1.41",
-      },
     },
     fontFamily: {
       Roboto: ["Roboto, sans-serif"],
