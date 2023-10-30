@@ -87,7 +87,7 @@
                   <label for="bankAccount">Numer konta bankowego</label>
                   <input
                     class="h-7 rounded-md border px-2"
-                    type="number"
+                    type="string"
                     id="bankAccount"
                     v-model="bankAccount"
                   />

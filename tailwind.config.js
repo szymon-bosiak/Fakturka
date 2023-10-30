@@ -12,6 +12,9 @@ module.exports = {
         "grey-dark": "#3B3B3D",
         "red-accent": "#C81E1E",
       },
+      fontSize: {
+        "xxs": "9px",
+      },
     },
     fontFamily: {
       Roboto: ["Roboto, sans-serif"],

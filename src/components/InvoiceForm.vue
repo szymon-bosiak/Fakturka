@@ -5,41 +5,61 @@
         <h3 class="mb-3 text-base">Dane faktury</h3>
 
         <div class="ml-4">
-          <div class="flex w-full max-w-[606px] flex-row gap-8">
-            <div class="w-26 mb-2 flex flex-col">
-              <label for="invoiceId">Nr faktury</label>
-              <input
-                class="h-7 rounded-md border"
-                type="text"
-                id="invoiceId"
-                :value="invoiceId"
-                @input="$emit('update:invoiceId', $event.target.value)"
-              />
+          <div class="flex w-full max-w-[606px] flex-col">
+            <div class="mb-1 flex flex-row gap-8">
+              <div class="mb-2 flex w-[130px] flex-col">
+                <label for="invoiceId">Nr faktury</label>
+                <input
+                  class="h-7 rounded-md border pl-2"
+                  type="text"
+                  id="invoiceId"
+                  :value="invoiceId"
+                  @input="$emit('update:invoiceId', $event.target.value)"
+                />
+              </div>
+
+              <div class="flex w-full flex-col">
+                <label for="invoicePlace">Miejsce wystawienia</label>
+                <input
+                  class="h-7 rounded-md border pl-2"
+                  type="text"
+                  id="invoicePlace"
+                  :value="invoicePlace"
+                  @input="$emit('update:invoicePlace', $event.target.value)"
+                />
+              </div>
             </div>
 
-            <div class="flex w-full flex-col">
-              <label for="invoicePlace">Miejsce wystawienia</label>
-              <input
-                class="h-7 rounded-md border"
-                type="text"
-                id="invoicePlace"
-                :value="invoicePlace"
-                @input="$emit('update:invoicePlace', $event.target.value)"
-              />
-            </div>
+            <div class="flex gap-8">
+              <div class="flex w-full flex-col">
+                <label for="invoiceDateOf"
+                  >Data wykonania usługi (opcjonalnie)</label
+                >
+                <input
+                  class="h-7 rounded-md border px-2"
+                  type="date"
+                  id="invoiceDateOf"
+                  :value="invoiceDateOfService"
+                  @input="
+                    $emit('update:invoiceDateOfService', $event.target.value),
+                      $emit('enteredServiceDate')
+                  "
+                />
+              </div>
 
-            <div class="flex w-full flex-col">
-              <label for="invoiceDateOf">Data wystawienia</label>
-              <input
-                class="h-7 rounded-md border px-2"
-                type="date"
-                id="invoiceDateOf"
-                :value="invoiceDateOf"
-                @input="
-                  $emit('update:invoiceDateOf', $event.target.value),
-                    $emit('enteredDate')
-                "
-              />
+              <div class="flex w-full flex-col">
+                <label for="invoiceDateOf">Data wystawienia</label>
+                <input
+                  class="h-7 rounded-md border px-2"
+                  type="date"
+                  id="invoiceDateOf"
+                  :value="invoiceDateOf"
+                  @input="
+                    $emit('update:invoiceDateOf', $event.target.value),
+                      $emit('enteredDate')
+                  "
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -53,7 +73,7 @@
             <div class="flex w-full flex-col">
               <label for="payerId">Nazwa</label>
               <input
-                class="h-7 rounded-md border"
+                class="h-7 rounded-md border pl-2"
                 type="text"
                 id="payerId"
                 :value="payerId"
@@ -63,7 +83,7 @@
             <div class="flex w-32 flex-col">
               <label for="nip">NIP</label>
               <input
-                class="h-7 rounded-md border"
+                class="h-7 rounded-md border pl-2"
                 type="text"
                 id="nip"
                 :value="nip"
@@ -76,7 +96,7 @@
             <div class="mb-2 flex w-52 flex-col">
               <label for="street">Ulica</label>
               <input
-                class="h-7 rounded-md border"
+                class="h-7 rounded-md border pl-2"
                 type="text"
                 id="street"
                 :value="street"
@@ -86,7 +106,7 @@
             <div class="flex w-32 flex-col">
               <label for="postal">Kod pocztowy</label>
               <input
-                class="h-7 rounded-md border"
+                class="h-7 rounded-md border pl-2"
                 type="text"
                 id="postal"
                 :value="postal"
@@ -96,7 +116,7 @@
             <div class="flex w-52 flex-col">
               <label for="city">Miasto</label>
               <input
-                class="h-7 rounded-md border"
+                class="h-7 rounded-md border pl-2"
                 type="text"
                 id="city"
                 :value="city"
@@ -133,10 +153,22 @@
                 :value="deadline"
                 @input="$emit('update:deadline', $event.target.value)"
               >
+                <option value="0 dni">0 dni</option>
                 <option value="7 dni">7 dni</option>
                 <option value="14 dni">14 dni</option>
                 <option value="30 dni">30 dni</option>
               </select>
+            </div>
+
+            <div class="flex w-52 flex-col">
+              <label for="city">Waluta</label>
+              <input
+                class="h-7 rounded-md border pl-2"
+                type="text"
+                id="currency"
+                :value="currency"
+                @input="$emit('update:currency', $event.target.value)"
+              />
             </div>
           </div>
         </div>
@@ -146,7 +178,7 @@
         <h3 class="mb-3 text-base">Przedmiot sprzedaży</h3>
 
         <div
-          class="h-[290px] overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-500 scrollbar-thumb-rounded-lg"
+          class="h-[240px] overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-500 scrollbar-thumb-rounded-lg"
         >
           <div
             v-for="(item, index) in formData"
@@ -174,7 +206,7 @@
                     Zakres wykonania usług</label
                   >
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="text"
                     :id="'itemId' + index"
                     :value="item.itemId"
@@ -185,7 +217,7 @@
                 <div class="flex w-16 flex-col">
                   <label :for="'itemMeasurement' + index">Miara</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="text"
                     :id="'itemMeasurement' + index"
                     :value="item.itemMeasurement"
@@ -196,7 +228,7 @@
                 <div class="flex w-16 flex-col">
                   <label :for="'itemQuantity' + index">Ilość</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="number"
                     :id="'itemQuantity' + index"
                     :value="item.itemQuantity"
@@ -209,7 +241,7 @@
                 <div class="flex w-full flex-col">
                   <label :for="'itemNet' + index">Wartość Netto</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="number"
                     :id="'itemNet' + index"
                     :value="item.itemNet"
@@ -220,7 +252,7 @@
                 <div class="flex w-16 flex-col">
                   <label :for="'itemTaxPercentage' + index">Stawka %</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="number"
                     :id="'itemTaxPercentage' + index"
                     :value="item.itemTaxPercentage"
@@ -231,22 +263,22 @@
                 <div class="flex w-24 flex-col">
                   <label :for="'itemTax' + index">Kwota podatku</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="number"
                     :id="'itemTax' + index"
                     :value="item.itemTax"
-                    @input="item.itemTax = $event.target.value"
+                    @input="item.itemTax = $event.target.value, $emit('calculateTotalTax')"
                   />
                 </div>
 
                 <div class="flex w-full flex-col">
                   <label :for="'itemGross' + index">Wartość Brutto</label>
                   <input
-                    class="h-7 rounded-md border"
+                    class="h-7 rounded-md border pl-2"
                     type="number"
                     :id="'itemGross' + index"
                     :value="item.itemGross"
-                    @input="item.itemGross = $event.target.value"
+                    @input="item.itemGross = $event.target.value, $emit('calculateTotalSum')"
                   />
                 </div>
               </div>
@@ -258,7 +290,7 @@
           >
             <div
               @click="$emit('addMore')"
-              class="flex items-center transition duration-300 hover:scale-105 hover:brightness-125"
+              class="flex items-center transition duration-300 hover:scale-105 hover:brightness-125 mb-2"
             >
               <div
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500"
@@ -271,23 +303,22 @@
         </div>
       </div>
     </form>
-  </div>
-
-  <div class="mx-6 flex justify-end">
-    <button
-      @click="$emit('exportDoc')"
-      class="mr-6 rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
-    >
-    <i class="fa-solid fa-floppy-disk -translate-x-1"></i>
-      Zapisz
-    </button>
-    <button
-      @click="$emit('printDoc')"
-      class="rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
-    >
-      <i class="fa-solid fa-print -translate-x-1"></i>
-      Drukuj
-    </button>
+    <div class="mr-5 flex justify-end">
+      <button
+        @click="$emit('exportDoc')"
+        class="mr-6 rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
+      >
+        <i class="fa-solid fa-floppy-disk -translate-x-1"></i>
+        Zapisz
+      </button>
+      <button
+        @click="$emit('printDoc')"
+        class="rounded-lg border px-4 py-2 text-lg transition duration-200 hover:bg-blue-500 hover:text-white"
+      >
+        <i class="fa-solid fa-print -translate-x-1"></i>
+        Drukuj
+      </button>
+    </div>
   </div>
 </template>
 
@@ -295,18 +326,23 @@
 defineEmits([
   "printDoc",
   "exportDoc",
+  "enteredServiceDate",
   "enteredDate",
+  "calculateTotalTax",
+  "calculateTotalSum",
   "remove",
   "addMore",
   "update:invoiceId",
   "update:invoicePlace",
   "update:invoiceDateOf",
+  "update:invoiceDateOfService",
   "update:payerId",
   "update:nip",
   "update:street",
   "update:postal",
   "update:city",
   "update:method",
+  "update:currency",
   "update:deadline",
   "update:formData",
 ]);
@@ -314,6 +350,7 @@ defineEmits([
 const props = defineProps({
   invoiceId: String,
   invoiceDateOf: String,
+  invoiceDateOfService: String,
   invoicePlace: String,
   payerId: String,
   nip: String,
@@ -321,6 +358,7 @@ const props = defineProps({
   postal: String,
   city: String,
   method: String,
+  currency: String,
   deadline: String,
   formData: Object,
   itemId: String,

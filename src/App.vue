@@ -3,8 +3,12 @@
     <nav
       class="flex h-16 w-full items-center justify-between bg-accent-1 px-10"
     >
-      <div class="flex text-white items-center">
-        <img class="invert w-10 h-10 mr-2" src="./assets/logo.svg" alt="Fakturka's logo">
+      <div class="flex items-center text-white">
+        <img
+          class="mr-2 h-10 w-10 invert"
+          src="./assets/logo.svg"
+          alt="Fakturka's logo"
+        />
         <p class="">Fakurka</p>
       </div>
       <i
@@ -41,23 +45,28 @@
         </nav>
 
         <div class="flex justify-center">
-          <div class="w-full max-w-[780px]">
+          <div class="w-full max-w-[700px]">
             <InvoiceForm
               v-if="changeView"
               @print-doc="printDoc()"
               @export-doc="exportDoc()"
               @entered-date="formatDate()"
+              @entered-service-date="formatServiceDate()"
               @remove="remove()"
               @add-more="addMore()"
+              @calculate-total-tax="calculateTotalTax()"
+              @calculate-total-sum="calculateTotalSum()"
               v-model:invoiceId="invoiceId"
               v-model:invoicePlace="invoicePlace"
               v-model:invoiceDateOf="invoiceDateOf"
+              v-model:invoiceDateOfService="invoiceDateOfService"
               v-model:payerId="payerId"
               v-model:nip="nip"
               v-model:street="street"
               v-model:postal="postal"
               v-model:city="city"
               v-model:method="method"
+              v-model:currency="currency"
               v-model:deadline="deadline"
               v-model:formData="formData"
             />
@@ -75,14 +84,18 @@
             :invoiceId="invoiceId"
             :invoicePlace="invoicePlace"
             :formatedDate="formatedDate"
+            :formatedServiceDate="formatedServiceDate"
             :payerId="payerId"
             :nip="nip"
             :street="street"
             :postal="postal"
             :city="city"
             :method="method"
+            :currency="currency"
             :deadline="deadline"
             :formData="formData"
+            :totalSum="totalSum"
+            :totalTax="totalTax"
             :sellerIdStored="sellerIdStored"
             :sellerNipStored="sellerNipStored"
             :sellerStreetStored="sellerStreetStored"
@@ -113,12 +126,14 @@ const editProfile = ref(false);
 const invoiceId = ref();
 const invoicePlace = ref();
 const invoiceDateOf = ref();
+const invoiceDateOfService = ref();
 const payerId = ref();
 const nip = ref();
 const street = ref();
 const postal = ref();
 const city = ref();
 const method = ref();
+const currency = ref();
 const deadline = ref();
 const formData = ref([]);
 const sellerIdStored = ref();
@@ -135,7 +150,7 @@ const imageSrcStored = ref();
 
 let opt = {
   margin: 0,
-  html2canvas: { scale: 5, height: 833, width: 589 },
+  html2canvas: { scale: 7, height: 833, width: 589 },
   jsPDF: { unit: "mm", format: "a4", orientation: "p" },
 };
 
@@ -200,11 +215,37 @@ const viewProfileEdit = () => {
   editProfile.value = !editProfile.value;
 };
 
+const formatedServiceDate = ref();
+const formatServiceDate = () => {
+  let arr = invoiceDateOfService.value.split("-");
+  let rearanged = [arr[2], arr[1], arr[0]].join(".");
+
+  formatedServiceDate.value = rearanged + "r.";
+};
+
 const formatedDate = ref();
 const formatDate = () => {
   let arr = invoiceDateOf.value.split("-");
   let rearanged = [arr[2], arr[1], arr[0]].join(".");
 
-  formatedDate.value = rearanged;
+  formatedDate.value = rearanged + "r.";
+};
+
+const totalTax = ref(0);
+const calculateTotalTax = () => {
+  let sum = 0;
+  for (let i = 0; i < formData.value.length; i++) {
+    sum += parseFloat(formData.value[i].itemTax);
+  }
+  totalTax.value = sum;
+};
+
+const totalSum = ref(0);
+const calculateTotalSum = () => {
+  let sum = 0;
+  for (let i = 0; i < formData.value.length; i++) {
+    sum += parseFloat(formData.value[i].itemGross);
+  }
+  totalSum.value = sum;
 };
 </script>
