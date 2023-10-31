@@ -26,23 +26,46 @@
 
     <div class="grid h-full grid-cols-2 grid-rows-1">
       <div class="w-full min-w-[600px] bg-white">
-        <nav class="my-5 flex justify-center">
-          <button
-            @click="changeView = true"
-            class="mr-8 rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
-            :class="{ 'bg-blue-500 text-white': changeView === true }"
-            to="/"
-          >
-            Wystaw fakturę
-          </button>
-          <button
-            @click="changeView = false"
-            class="rounded-xl border px-6 py-3 transition duration-300 hover:scale-105"
-            :class="{ 'bg-blue-500 text-white': changeView === false }"
-          >
-            Dodaj podmiot
-          </button>
-        </nav>
+        <div class="mx-6 my-5 rounded-full bg-grey-mid p-1">
+          <div class="flex max-w-[700px] gap-2">
+            <div
+              @click="showProfileMenu(), newProfile()"
+              class="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-grey-dark bg-grey-light text-2xl"
+            >
+              <i class="fa-solid fa-plus text-3xl font-thin text-grey-dark"></i>
+            </div>
+            <div
+              v-for="(profile, index) in profileStorage"
+              :key="'p' + index"
+              :id="'p' + index"
+            >
+              <div
+                @click="profileFill(index)"
+                @mouseover="showOptions(index)"
+                @mouseleave="showOptions(index)"
+                class="relative flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 bg-blue-500 text-3xl text-white"
+              >
+                <div class="hidden" :id="'option' + index">
+                  <i
+                    class="fa-solid fa-pen-to-square absolute -top-2 left-0 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-lime-600 text-base text-black"
+                  ></i>
+                  <i
+                    class="fa-solid fa-trash-can absolute -top-2 right-0 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-red-accent text-base text-black"
+                  ></i>
+                </div>
+                <p>{{ profile.profileShort }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ProfileEdit
+          @show-profile-menu="showProfileMenu()"
+          @remove-profile="removeProfile()"
+          @new-profile="newProfile()"
+          @save-profile="saveProfile()"
+          v-model:profileStorage="profileStorage"
+          :profileMenu="profileMenu"
+        />
 
         <div class="flex justify-center">
           <div class="w-full max-w-[700px]">
@@ -70,7 +93,6 @@
               v-model:deadline="deadline"
               v-model:formData="formData"
             />
-            <BillingData v-else />
           </div>
         </div>
       </div>
@@ -115,7 +137,7 @@
 </template>
 
 <script setup>
-import BillingData from "./components/BillingData.vue";
+import ProfileEdit from "./components/ProfileEdit.vue";
 import InvoiceForm from "./components/InvoiceForm.vue";
 import DocumentPreview from "./components/DocumentPreview.vue";
 import sellersInfoForm from "./components/sellersInfoForm.vue";
@@ -123,6 +145,7 @@ import { ref } from "vue";
 
 const changeView = ref(true);
 const editProfile = ref(false);
+const profileMenu = ref(false);
 const invoiceId = ref();
 const invoicePlace = ref();
 const invoiceDateOf = ref();
@@ -136,6 +159,7 @@ const method = ref();
 const currency = ref();
 const deadline = ref();
 const formData = ref([]);
+const profileStorage = ref([]);
 const sellerIdStored = ref();
 const sellerNipStored = ref();
 const sellerStreetStored = ref();
@@ -211,9 +235,46 @@ const addMore = () => {
   formData.value.push({});
 };
 
+// SAVING PROFILES
+
 const viewProfileEdit = () => {
   editProfile.value = !editProfile.value;
 };
+
+const profileFill = (index) => {
+  payerId.value = profileStorage.value[index].profileName;
+  nip.value = profileStorage.value[index].profileNip;
+  street.value = profileStorage.value[index].profileStreet;
+  postal.value = profileStorage.value[index].profilePostal;
+  city.value = profileStorage.value[index].profileCity;
+};
+
+const saveProfile = () => {
+  localStorage.setItem("sevedProfiles", JSON.stringify(profileStorage.value));
+};
+
+const showProfileMenu = () => {
+  profileMenu.value = !profileMenu.value;
+};
+
+const newProfile = () => {
+  profileStorage.value.push({});
+};
+
+const removeProfile = () => {
+  profileStorage.value.pop();
+};
+
+if (localStorage.getItem("sevedProfiles") !== null) {
+  profileStorage.value = JSON.parse(localStorage.getItem("sevedProfiles"));
+}
+
+const showOptions = (index) => {
+  let element = document.querySelector('#option' + index)
+  element.classList.toggle("hidden")
+}
+
+// FORMATING DATE
 
 const formatedServiceDate = ref();
 const formatServiceDate = () => {
@@ -230,6 +291,8 @@ const formatDate = () => {
 
   formatedDate.value = rearanged + "r.";
 };
+
+//CALCULATING SUMS
 
 const totalTax = ref(0);
 const calculateTotalTax = () => {

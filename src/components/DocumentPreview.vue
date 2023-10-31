@@ -2,7 +2,7 @@
   <div class="flex h-[833px] w-[591px] bg-white text-xs shadow-2xl">
     <div class="min-w-[180px] max-w-[180px] bg-grey-light">
       <div class="flex h-44 w-full items-center justify-center">
-        <img class="max-w-20 max-h-20" :src="imageSrcStored" alt="logo" />
+        <img class="max-w-20 max-h-20" :src="imageSrcStored" />
       </div>
 
       <div class="pl-5 pr-3">
@@ -23,7 +23,7 @@
 
       <div class="pl-5 pr-3">
         <div class="min-h-[144px] pb-6">
-          <h2 class="mb-4">Sprzedawca:</h2>
+          <h2 class="mb-4">Wystawca/Sprzedawca:</h2>
           <p class="mb-2 font-bold">{{ sellerIdStored }}</p>
           <p v-show="sellerNipStored">NIP: {{ sellerNipStored }}</p>
           <p v-show="sellerStreetStored">ul. {{ sellerStreetStored }}</p>
@@ -51,17 +51,17 @@
         </div>
       </div>
 
-      <div class="h-[80px] bg-grey-mid">
+      <div class="h-[120px] bg-grey-mid">
         <div class="flex h-full flex-col justify-center px-6">
-          <h2 class="mb-1 font-bold">Płatność:</h2>
+          <h2 class="mb-1 text-sm font-bold">Płatność:</h2>
+          <p class="mb-[2px] font-semibold">Do zapłaty: {{ totalSum }}</p>
+          <p>Waluta: {{ currency }}</p>
           <p>Metoda: {{ method }}</p>
           <p>Termin: {{ deadline }}</p>
-          <p>Waluta: {{ currency }}</p>
-          <p>Do zapłaty: {{ totalSum }}</p>
         </div>
       </div>
 
-      <div class="h-[142px] pr-3 pt-7">
+      <div class="h-[80px] pr-3 pt-[10px]">
         <h2 class="mb-2 px-6 font-semibold">Kontakt:</h2>
         <div v-if="phoneStored" class="flex items-center gap-[2px] px-2">
           <i
@@ -150,7 +150,7 @@
           </p>
         </div>
 
-        <div class="min-h-[473px] bg-red-300">
+        <div class="min-h-[473px]">
           <div
             class="border-b border-black"
             v-for="(position, index) in formData"
@@ -160,24 +160,56 @@
                 class="flex w-[158px] break-all border-r border-grey-light text-left"
               >
                 <p class="w-[16px]">{{ index + 1 }}.</p>
-                <p>{{ position.itemId }}</p>
+                <div>
+                  <div
+                    v-if="!position.itemId"
+                    class="h-[1px] w-[130px] translate-y-[8px] bg-black"
+                  ></div>
+                  <p>{{ position.itemId }}</p>
+                </div>
               </div>
-              <p class="w-[28px] border-r border-grey-light">
-                {{ position.itemMeasurement }}
-              </p>
-              <p class="w-[28px] border-r border-grey-light">
-                {{ position.itemQuantity }}
-              </p>
-              <p class="w-[45px] border-r border-grey-light">
-                {{ position.itemNet }}
-              </p>
-              <p class="w-[42px] border-r border-grey-light">
-                {{ position.itemTaxPercentage }}
-              </p>
-              <p class="w-[42px] border-r border-grey-light">
-                {{ position.itemTax }}
-              </p>
-              <p class="w-[45px]">{{ position.itemGross }}</p>
+              <div class="w-[28px] border-r border-grey-light">
+                <div
+                  v-if="!position.itemMeasurement"
+                  class="ml-[4px] h-[1px] w-[18px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemMeasurement }}</p>
+              </div>
+              <div class="w-[28px] border-r border-grey-light">
+                <div
+                  v-if="!position.itemQuantity"
+                  class="ml-[4px] h-[1px] w-[18px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemQuantity }}</p>
+              </div>
+              <div class="w-[45px] border-r border-grey-light">
+                <div
+                  v-if="!position.itemNet"
+                  class="ml-[4px] h-[1px] w-[35px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemNet }}</p>
+              </div>
+              <div class="w-[42px] border-r border-grey-light">
+                <div
+                  v-if="!position.itemTaxPercentage"
+                  class="ml-[4px] h-[1px] w-[33px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemTaxPercentage }}</p>
+              </div>
+              <div class="w-[42px] border-r border-grey-light">
+                <div
+                  v-if="!position.itemTax"
+                  class="ml-[4px] h-[1px] w-[33px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemTax }}</p>
+              </div>
+              <div class="w-[45px]">
+                <div
+                  v-if="!position.itemGross"
+                  class="ml-[4px] h-[1px] w-[35px] translate-y-[8px] bg-black"
+                ></div>
+                <p>{{ position.itemGross }}</p>
+              </div>
             </div>
           </div>
 
@@ -195,14 +227,18 @@
                 <div
                   class="my-[2px] flex h-[18px] w-[1px] items-center bg-grey-light"
                 ></div>
-                <div class="w-full flex text-center justify-center items-center">
+                <div
+                  class="flex w-full items-center justify-center text-center"
+                >
                   <p class="min-w-[41px]">{{ totalTax }}</p>
                 </div>
 
                 <div
                   class="my-[2px] flex h-[18px] w-[1px] items-center bg-grey-light"
                 ></div>
-                <div class="w-full flex text-center justify-center items-center">
+                <div
+                  class="flex w-full items-center justify-center text-center"
+                >
                   <p class="min-w-[45px]">{{ totalSum }}</p>
                 </div>
               </div>
@@ -211,7 +247,7 @@
         </div>
 
         <div
-          class="flex h-[55px] items-end justify-between border-b border-black bg-green-200 pb-[5px]"
+          class="flex h-[55px] items-end justify-between border-b border-black pb-[5px]"
         >
           <div class="flex flex-col items-center">
             <p class="">

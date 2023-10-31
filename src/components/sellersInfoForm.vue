@@ -125,6 +125,8 @@
                     @change="saveImage($event)"
                     class="mr-2 flex h-8 items-center justify-center rounded-md border bg-white file:h-8 file:cursor-pointer file:rounded-sm file:border-0 file:bg-blue-500 file:text-white file:transition file:hover:bg-blue-400"
                     type="file"
+                    
+                    accept=".png, .jpg, .jpeg"
                     id="logo"
                   />
                   <div class="mt-3" :class="{ 'opacity-0': !imageSrc }">

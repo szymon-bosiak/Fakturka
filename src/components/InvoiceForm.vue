@@ -188,7 +188,11 @@
           >
             <div
               v-if="index === formData.length - 1"
-              @click="$emit('remove')"
+              @click="
+                $emit('remove'),
+                  $emit('calculateTotalTax'),
+                  $emit('calculateTotalSum')
+              "
               class="absolute right-2 top-2 cursor-pointer hover:scale-110 hover:brightness-125"
             >
               <div
@@ -267,7 +271,10 @@
                     type="number"
                     :id="'itemTax' + index"
                     :value="item.itemTax"
-                    @input="item.itemTax = $event.target.value, $emit('calculateTotalTax')"
+                    @input="
+                      (item.itemTax = $event.target.value),
+                        $emit('calculateTotalTax')
+                    "
                   />
                 </div>
 
@@ -278,19 +285,20 @@
                     type="number"
                     :id="'itemGross' + index"
                     :value="item.itemGross"
-                    @input="item.itemGross = $event.target.value, $emit('calculateTotalSum')"
+                    @input="
+                      (item.itemGross = $event.target.value),
+                        $emit('calculateTotalSum')
+                    "
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div
-            class="mb-1 mt-5 flex cursor-pointer justify-center font-semibold"
-          >
+          <div class="mb-1 mt-5 flex justify-center font-semibold">
             <div
               @click="$emit('addMore')"
-              class="flex items-center transition duration-300 hover:scale-105 hover:brightness-125 mb-2"
+              class="mb-2 flex cursor-pointer items-center transition duration-300 hover:scale-105 hover:brightness-125"
             >
               <div
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500"
