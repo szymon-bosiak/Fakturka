@@ -26,38 +26,62 @@
 
     <div class="grid h-full grid-cols-2 grid-rows-1">
       <div class="w-full min-w-[600px] bg-white">
-        <div class="mx-6 my-5 rounded-full bg-grey-mid p-1">
-          <div class="flex max-w-[700px] gap-2">
-            <div
-              @click="showProfileMenu(), newProfile()"
-              class="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-grey-dark bg-grey-light text-2xl"
-            >
-              <i class="fa-solid fa-plus text-3xl font-thin text-grey-dark"></i>
-            </div>
-            <div
-              v-for="(profile, index) in profileStorage"
-              :key="'p' + index"
-              :id="'p' + index"
-            >
-              <div
-                @click="profileFill(index)"
-                @mouseover="showOptions(index)"
-                @mouseleave="showOptions(index)"
-                class="relative flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 bg-blue-500 text-3xl text-white"
-              >
-                <div class="hidden" :id="'option' + index">
+        <div class="flex justify-center">
+          <div class="w-full max-w-[700px]">
+            <div class="mx-6 my-5 rounded-full bg-grey-mid p-1">
+              <div class="flex">
+                <div
+                  class="relative cursor-pointer rounded-full bg-grey-light"
+                  @click="showProfileMenu(), newProfile()"
+                >
+                  <div
+                    class="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-grey-dark text-2xl transition duration-300 hover:rotate-90 hover:scale-110"
+                  ></div>
                   <i
-                    class="fa-solid fa-pen-to-square absolute -top-2 left-0 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-lime-600 text-base text-black"
-                  ></i>
-                  <i
-                    class="fa-solid fa-trash-can absolute -top-2 right-0 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-red-accent text-base text-black"
+                    class="fa-solid fa-plus absolute left-[16px] top-[13px] text-4xl font-thin text-grey-dark"
                   ></i>
                 </div>
-                <p>{{ profile.profileShort }}</p>
+
+                <div class="flex w-[480px] flex-row items-center gap-1 px-3">
+                  <div>
+                    <i class="fa-solid fa-caret-left text-2xl"></i>
+                  </div>
+
+                  <div class="relative z-0 flex w-full justify-start gap-2">
+                    <div
+                      v-for="(profile, index) in profileStorageSaved"
+                      :key="'p' + index"
+                      :id="'p' + index"
+                    >
+                      <div
+                        @click="profileFill(index)"
+                        @mouseover="showOptionsIn(index)"
+                        @mouseleave="showOptionsOut(index)"
+                        class="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 bg-blue-500 text-3xl text-white transition hover:scale-105"
+                      >
+                        <div class="hidden" :id="'option' + index">
+                          <i
+                            class="fa-solid fa-pen-to-square absolute -top-2 left-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-lime-600 hover:brightness-110"
+                          ></i>
+                          <i
+                            @click="deleteSelected(index)"
+                            class="fa-solid fa-trash-can absolute -top-2 right-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-red-accent hover:brightness-110"
+                          ></i>
+                        </div>
+                        <p>{{ profile.profileShort }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <i class="fa-solid fa-caret-right text-2xl"></i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <ProfileEdit
           @show-profile-menu="showProfileMenu()"
           @remove-profile="removeProfile()"
@@ -160,6 +184,7 @@ const currency = ref();
 const deadline = ref();
 const formData = ref([]);
 const profileStorage = ref([]);
+const profileStorageSaved = ref([]);
 const sellerIdStored = ref();
 const sellerNipStored = ref();
 const sellerStreetStored = ref();
@@ -251,6 +276,7 @@ const profileFill = (index) => {
 
 const saveProfile = () => {
   localStorage.setItem("sevedProfiles", JSON.stringify(profileStorage.value));
+  profileStorageSaved.value = JSON.parse(localStorage.getItem("sevedProfiles"));
 };
 
 const showProfileMenu = () => {
@@ -265,14 +291,32 @@ const removeProfile = () => {
   profileStorage.value.pop();
 };
 
+const deleteSelected = (index) => {
+  if (index === 0) {
+    profileStorageSaved.value.shift();
+  } else {
+    profileStorageSaved.value.splice(index, 1);
+  }
+  localStorage.setItem(
+    "sevedProfiles",
+    JSON.stringify(profileStorageSaved.value),
+  );
+};
+
 if (localStorage.getItem("sevedProfiles") !== null) {
   profileStorage.value = JSON.parse(localStorage.getItem("sevedProfiles"));
+  profileStorageSaved.value = JSON.parse(localStorage.getItem("sevedProfiles"));
 }
 
-const showOptions = (index) => {
-  let element = document.querySelector('#option' + index)
-  element.classList.toggle("hidden")
-}
+const showOptionsIn = (index) => {
+  let element = document.querySelector("#option" + index);
+  element.classList.remove("hidden");
+};
+
+const showOptionsOut = (index) => {
+  let element = document.querySelector("#option" + index);
+  element.classList.add("hidden");
+};
 
 // FORMATING DATE
 
