@@ -1,14 +1,14 @@
 <template>
   <div
-    v-if="profileMenu"
-    class="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center backdrop-blur-sm"
+    v-if="profileEditMenu"
+    class="fixed left-0 top-0 z-20 flex h-screen w-screen items-center justify-center backdrop-blur-sm"
   >
     <div
       class="h-5/6 max-h-[500px] w-5/6 max-w-[800px] rounded-2xl bg-white shadow-2xl outline outline-2 outline-grey-mid"
     >
       <div class="flex justify-end">
         <div
-          @click="$emit('showProfileMenu'), $emit('removeProfile')"
+          @click="$emit('showProfileEditMenu'), $emit('removeEditChanges')"
           class="m-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-accent transition hover:scale-105 hover:brightness-110"
         >
           <i class="fa-solid fa-xmark text-xl text-white"></i>
@@ -18,7 +18,7 @@
       <div class="flex w-full justify-center">
         <form>
           <div class="flex flex-col">
-            <h2 class="mb-6 text-xl font-semibold">Profil nabywcy</h2>
+            <h2 class="mb-6 text-xl font-semibold">Edytowanie profilu nabywcy</h2>
 
             <div class="ml-4">
               <div class="flex w-[45px] flex-col">
@@ -28,7 +28,7 @@
                   type="text"
                   id="profileShort"
                   v-model="
-                    profileStorage[profileStorage.length - 1].profileShort
+                    profileStorage[editIndex].profileShort
                   "
                 />
               </div>
@@ -40,7 +40,7 @@
                     type="text"
                     id="profileName"
                     v-model="
-                      profileStorage[profileStorage.length - 1].profileName
+                      profileStorage[editIndex].profileName
                     "
                   />
                 </div>
@@ -51,7 +51,7 @@
                     type="text"
                     id="profileNip"
                     v-model="
-                      profileStorage[profileStorage.length - 1].profileNip
+                      profileStorage[editIndex].profileNip
                     "
                   />
                 </div>
@@ -65,7 +65,7 @@
                     type="text"
                     id="profileStreet"
                     v-model="
-                      profileStorage[profileStorage.length - 1].profileStreet
+                      profileStorage[editIndex].profileStreet
                     "
                   />
                 </div>
@@ -76,7 +76,7 @@
                     type="text"
                     id="profilePostal"
                     v-model="
-                      profileStorage[profileStorage.length - 1].profilePostal
+                      profileStorage[editIndex].profilePostal
                     "
                   />
                 </div>
@@ -87,7 +87,7 @@
                     type="text"
                     id="profileCity"
                     v-model="
-                      profileStorage[profileStorage.length - 1].profileCity
+                      profileStorage[editIndex].profileCity
                     "
                   />
                 </div>
@@ -98,10 +98,10 @@
       </div>
       <div class="flex w-full justify-end px-7">
         <button
-          @click="$emit('showProfileMenu'), $emit('saveProfile')"
-          class="h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
+          @click="$emit('showProfileEditMenu'), $emit('saveProfile')"
+          class="h-12 w-36 rounded-xl mt-28 border bg-blue-500 text-lg text-white transition hover:scale-105"
         >
-          Zapisz dane
+          Zapisz zmiany
         </button>
       </div>
     </div>
@@ -109,10 +109,11 @@
 </template>
 
 <script setup>
-defineEmits(["showProfileMenu", "removeProfile", "saveProfile"]);
+defineEmits(["showProfileEditMenu", "removeEditChanges", "saveProfile"]);
 
 const props = defineProps({
-  profileMenu: Boolean,
+  profileEditMenu: Boolean,
   profileStorage: Object,
+  editIndex: Number,
 });
 </script>

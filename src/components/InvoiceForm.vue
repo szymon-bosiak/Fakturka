@@ -1,7 +1,7 @@
 <template>
   <div class="mx-6 text-sm">
     <form>
-      <div class="mb-6 flex flex-col">
+      <div class="mb-5 flex flex-col">
         <h3 class="mb-3 text-base">Dane faktury</h3>
 
         <div class="ml-4">
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <div class="mb-6 flex flex-col">
+      <div class="mb-5 flex flex-col">
         <h3 class="mb-3 text-base">Dane Nabywcy</h3>
 
         <div class="ml-4">
@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <div class="mb-6 flex flex-col">
+      <div class="mb-5 flex flex-col">
         <h3 class="mb-3 text-base">Płatność</h3>
 
         <div class="ml-4 w-full max-w-[606px]">
@@ -178,7 +178,7 @@
         <h3 class="mb-3 text-base">Przedmiot sprzedaży</h3>
 
         <div
-          class="h-[240px] overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-500 scrollbar-thumb-rounded-lg"
+          class="h-[240px] overflow-y-scroll overflow-x-hidden outline outline-2 outline-grey-light rounded-md py-2 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-thumb-rounded-lg"
         >
           <div
             v-for="(item, index) in formData"

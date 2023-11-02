@@ -1,4 +1,7 @@
 <template>
+  <div class="xl:hidden fixed z-50 flex items-center justify-center text-center text-3xl px-5 font w-screen h-screen bg-grey-mid">
+    <p class="bg-white border-2 border-dashed border-grey-dark rounded-lg px-20 py-64">Ta aplikacj jest przeznaczona wyłącznie do użytku na dużych ekranach.</p>
+  </div>
   <div class="flex h-screen flex-col bg-background">
     <nav
       class="flex h-16 w-full items-center justify-between bg-accent-1 px-10"
@@ -18,20 +21,46 @@
       ></i>
     </nav>
 
+    <!-- POP-UPS -->
+
     <sellersInfoForm
       v-if="editProfile"
       @close="viewProfileEdit()"
       @update-preview="updatePreview()"
     />
 
+    <ProfileCreate
+      @show-profile-menu="showProfileMenu()"
+      @remove-profile="removeProfile()"
+      @save-profile="saveProfile()"
+      v-model:profileStorage="profileStorage"
+      :profileMenu="profileMenu"
+    />
+
+    <ProfileEdit
+      @show-profile-edit-menu="showProfileEditMenu()"
+      @save-profile="saveProfile()"
+      @remove-edit-changes="removeEditChanges()"
+      v-model:profileStorage="profileStorage"
+      :editIndex="editIndex"
+      :profileEditMenu="profileEditMenu"
+    />
+
+    <deleteConfirmation :showDeleteConfirmation="showDeleteConfirmation" 
+    @delete-selected="deleteSelected"
+    @leave-selected="leaveSelected"
+    @toggle-show-delete-confirmation="toggleShowDeleteConfirmation()"/>
+
+    <!-- END OF POP-UPS -->
+
     <div class="grid h-full grid-cols-2 grid-rows-1">
       <div class="w-full min-w-[600px] bg-white">
         <div class="flex justify-center">
-          <div class="w-full max-w-[700px]">
-            <div class="mx-6 my-5 rounded-full bg-grey-mid p-1">
-              <div class="flex">
+          <div class="max-w-[700px]">
+            <div class="mx-6 my-4 rounded-full bg-grey-light p-1">
+              <div class="ml-1 flex">
                 <div
-                  class="relative cursor-pointer rounded-full bg-grey-light"
+                  class="bg-grey- relative my-1 cursor-pointer rounded-full"
                   @click="showProfileMenu(), newProfile()"
                 >
                   <div
@@ -42,67 +71,53 @@
                   ></i>
                 </div>
 
-                <div class="flex w-[510px] flex-row items-center gap-1 px-3">
-                  
-                  
-
+                <div class="flex max-w-[545px] flex-row items-center px-3">
+                  <div v-if="profileStorageSaved.length === 0">
+                    <p class="text-sm">
+                      Kliknij ikonę + aby utworzyć profil nabywcy.
+                    </p>
+                  </div>
                   <swiper
-                    :modules="[Navigation]"
-                    :slides-per-view="6"
-                    :space-between="0"
-                    
-                    class="w-full"
+                    :slides-per-view="5"
+                    :space-between="10"
+                    class="relative w-[545px]"
                   >
-                  <swiperPrevBtn />
+                    <swiperPrevBtn class="absolute left-0 top-[19px] z-10" />
+                    <swiperNextBtn class="absolute right-0 top-[19px] z-10" />
                     <swiper-slide
                       v-for="(profile, index) in profileStorageSaved"
                       :key="'p' + index"
                       :id="'p' + index"
+                      class="px-4"
                     >
                       <div
                         @click="profileFill(index)"
                         @mouseover="showOptionsIn(index)"
                         @mouseleave="showOptionsOut(index)"
-                        class="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 bg-blue-500 text-3xl text-white transition hover:scale-105"
+                        class="my-1 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 bg-blue-500 text-3xl text-white transition hover:scale-105"
                       >
                         <div class="hidden" :id="'option' + index">
                           <i
                             @click="showProfileEditMenu(index)"
-                            class="fa-solid fa-pen-to-square absolute -top-2 left-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-lime-600 hover:brightness-110"
+                            class="fa-solid fa-pen-to-square absolute -top-1 left-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-lime-600 hover:brightness-110"
                           ></i>
                           <i
-                            @click="deleteSelected(index)"
-                            class="fa-solid fa-trash-can absolute -top-2 right-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-red-accent hover:brightness-110"
+                            @click="
+                              toggleShowDeleteConfirmation(),
+                              awaitingDeleteConfirmation = index
+                            "
+                            class="fa-solid fa-trash-can absolute -top-1 right-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-red-accent hover:brightness-110"
                           ></i>
                         </div>
                         <p>{{ profile.profileShort }}</p>
                       </div>
                     </swiper-slide>
-                    <swiperNextBtn />
                   </swiper>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <ProfileCreate
-          @show-profile-menu="showProfileMenu()"
-          @remove-profile="removeProfile()"
-          @save-profile="saveProfile()"
-          v-model:profileStorage="profileStorage"
-          :profileMenu="profileMenu"
-        />
-
-        <ProfileEdit
-          @show-profile-edit-menu="showProfileEditMenu()"
-          @save-profile="saveProfile()"
-          @remove-edit-changes="removeEditChanges()"
-          v-model:profileStorage="profileStorage"
-          :editIndex="editIndex"
-          :profileEditMenu="profileEditMenu"
-        />
 
         <div class="flex justify-center">
           <div class="w-full max-w-[700px]">
@@ -174,23 +189,23 @@
 </template>
 
 <script setup>
-import ProfileCreate from "./components/ProfileCreate.vue";
-import ProfileEdit from "./components/ProfileEdit.vue";
-import InvoiceForm from "./components/InvoiceForm.vue";
-import DocumentPreview from "./components/DocumentPreview.vue";
-import sellersInfoForm from "./components/sellersInfoForm.vue";
 import swiperPrevBtn from "./components/customSwiper/swiperPrevBtn.vue";
 import swiperNextBtn from "./components/customSwiper/swiperNextBtn.vue";
+import ProfileCreate from "./components/popUps/ProfileCreate.vue";
+import ProfileEdit from "./components/popUps/ProfileEdit.vue";
+import deleteConfirmation from "./components/popUps/deleteConfirmation.vue";
+import sellersInfoForm from "./components/popUps/sellersInfoForm.vue";
+import InvoiceForm from "./components/InvoiceForm.vue";
+import DocumentPreview from "./components/DocumentPreview.vue";
 import { ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
 
 const changeView = ref(true);
 const editProfile = ref(false);
 const profileMenu = ref(false);
 const profileEditMenu = ref(false);
+const showDeleteConfirmation = ref();
 const invoiceId = ref();
 const invoicePlace = ref();
 const invoiceDateOf = ref();
@@ -322,17 +337,26 @@ const removeEditChanges = () => {
   profileStorage.value = JSON.parse(localStorage.getItem("sevedProfiles"));
 };
 
-const deleteSelected = (index) => {
-  if (index === 0) {
+const toggleShowDeleteConfirmation = () => {
+  showDeleteConfirmation.value = !showDeleteConfirmation.value;
+};
+
+const awaitingDeleteConfirmation = ref()
+const deleteSelected = () => {
+  if (awaitingDeleteConfirmation.value === 0) {
     profileStorageSaved.value.shift();
   } else {
-    profileStorageSaved.value.splice(index, 1);
+    profileStorageSaved.value.splice(awaitingDeleteConfirmation.value, 1);
   }
   localStorage.setItem(
     "sevedProfiles",
     JSON.stringify(profileStorageSaved.value),
   );
 };
+
+const leaveSelected = () => {
+  awaitingDeleteConfirmation.value = null
+}
 
 if (localStorage.getItem("sevedProfiles") !== null) {
   profileStorage.value = JSON.parse(localStorage.getItem("sevedProfiles"));
