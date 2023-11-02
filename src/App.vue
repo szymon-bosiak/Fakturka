@@ -21,7 +21,7 @@
     <sellersInfoForm
       v-if="editProfile"
       @close="viewProfileEdit()"
-      @update-preview="updatePreview"
+      @update-preview="updatePreview()"
     />
 
     <div class="grid h-full grid-cols-2 grid-rows-1">
@@ -42,13 +42,19 @@
                   ></i>
                 </div>
 
-                <div class="flex w-[480px] flex-row items-center gap-1 px-3">
-                  <div>
-                    <i class="fa-solid fa-caret-left text-2xl"></i>
-                  </div>
+                <div class="flex w-[510px] flex-row items-center gap-1 px-3">
+                  
+                  
 
-                  <div class="relative z-0 flex w-full justify-start gap-2">
-                    <div
+                  <swiper
+                    :modules="[Navigation]"
+                    :slides-per-view="6"
+                    :space-between="0"
+                    
+                    class="w-full"
+                  >
+                  <swiperPrevBtn />
+                    <swiper-slide
                       v-for="(profile, index) in profileStorageSaved"
                       :key="'p' + index"
                       :id="'p' + index"
@@ -61,6 +67,7 @@
                       >
                         <div class="hidden" :id="'option' + index">
                           <i
+                            @click="showProfileEditMenu(index)"
                             class="fa-solid fa-pen-to-square absolute -top-2 left-0 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-grey-dark bg-white text-base text-black transition hover:bg-lime-600 hover:brightness-110"
                           ></i>
                           <i
@@ -70,25 +77,31 @@
                         </div>
                         <p>{{ profile.profileShort }}</p>
                       </div>
-                    </div>
-                  </div>
+                    </swiper-slide>
+                    <swiperNextBtn />
+                  </swiper>
 
-                  <div>
-                    <i class="fa-solid fa-caret-right text-2xl"></i>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <ProfileEdit
+        <ProfileCreate
           @show-profile-menu="showProfileMenu()"
           @remove-profile="removeProfile()"
-          @new-profile="newProfile()"
           @save-profile="saveProfile()"
           v-model:profileStorage="profileStorage"
           :profileMenu="profileMenu"
+        />
+
+        <ProfileEdit
+          @show-profile-edit-menu="showProfileEditMenu()"
+          @save-profile="saveProfile()"
+          @remove-edit-changes="removeEditChanges()"
+          v-model:profileStorage="profileStorage"
+          :editIndex="editIndex"
+          :profileEditMenu="profileEditMenu"
         />
 
         <div class="flex justify-center">
@@ -161,15 +174,23 @@
 </template>
 
 <script setup>
+import ProfileCreate from "./components/ProfileCreate.vue";
 import ProfileEdit from "./components/ProfileEdit.vue";
 import InvoiceForm from "./components/InvoiceForm.vue";
 import DocumentPreview from "./components/DocumentPreview.vue";
 import sellersInfoForm from "./components/sellersInfoForm.vue";
+import swiperPrevBtn from "./components/customSwiper/swiperPrevBtn.vue";
+import swiperNextBtn from "./components/customSwiper/swiperNextBtn.vue";
 import { ref } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const changeView = ref(true);
 const editProfile = ref(false);
 const profileMenu = ref(false);
+const profileEditMenu = ref(false);
 const invoiceId = ref();
 const invoicePlace = ref();
 const invoiceDateOf = ref();
@@ -283,12 +304,22 @@ const showProfileMenu = () => {
   profileMenu.value = !profileMenu.value;
 };
 
+const editIndex = ref();
+const showProfileEditMenu = (index) => {
+  editIndex.value = index;
+  profileEditMenu.value = !profileEditMenu.value;
+};
+
 const newProfile = () => {
   profileStorage.value.push({});
 };
 
 const removeProfile = () => {
   profileStorage.value.pop();
+};
+
+const removeEditChanges = () => {
+  profileStorage.value = JSON.parse(localStorage.getItem("sevedProfiles"));
 };
 
 const deleteSelected = (index) => {

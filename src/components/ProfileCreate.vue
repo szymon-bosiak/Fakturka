@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="profileEditMenu"
+    v-if="profileMenu"
     class="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center backdrop-blur-sm"
   >
     <div
@@ -8,7 +8,7 @@
     >
       <div class="flex justify-end">
         <div
-          @click="$emit('showProfileEditMenu'), $emit('removeEditChanges')"
+          @click="$emit('showProfileMenu'), $emit('removeProfile')"
           class="m-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-accent transition hover:scale-105 hover:brightness-110"
         >
           <i class="fa-solid fa-xmark text-xl text-white"></i>
@@ -28,7 +28,7 @@
                   type="text"
                   id="profileShort"
                   v-model="
-                    profileStorage[editIndex].profileShort
+                    profileStorage[profileStorage.length - 1].profileShort
                   "
                 />
               </div>
@@ -40,7 +40,7 @@
                     type="text"
                     id="profileName"
                     v-model="
-                      profileStorage[editIndex].profileName
+                      profileStorage[profileStorage.length - 1].profileName
                     "
                   />
                 </div>
@@ -51,7 +51,7 @@
                     type="text"
                     id="profileNip"
                     v-model="
-                      profileStorage[editIndex].profileNip
+                      profileStorage[profileStorage.length - 1].profileNip
                     "
                   />
                 </div>
@@ -65,7 +65,7 @@
                     type="text"
                     id="profileStreet"
                     v-model="
-                      profileStorage[editIndex].profileStreet
+                      profileStorage[profileStorage.length - 1].profileStreet
                     "
                   />
                 </div>
@@ -76,7 +76,7 @@
                     type="text"
                     id="profilePostal"
                     v-model="
-                      profileStorage[editIndex].profilePostal
+                      profileStorage[profileStorage.length - 1].profilePostal
                     "
                   />
                 </div>
@@ -87,7 +87,7 @@
                     type="text"
                     id="profileCity"
                     v-model="
-                      profileStorage[editIndex].profileCity
+                      profileStorage[profileStorage.length - 1].profileCity
                     "
                   />
                 </div>
@@ -98,8 +98,8 @@
       </div>
       <div class="flex w-full justify-end px-7">
         <button
-          @click="$emit('showProfileEditMenu'), $emit('saveProfile')"
-          class="h-12 w-36 rounded-xl mt-28 border bg-blue-500 text-lg text-white transition hover:scale-105"
+          @click="$emit('showProfileMenu'), $emit('saveProfile')"
+          class="h-12 w-36 rounded-xl border bg-blue-500 text-lg text-white transition hover:scale-105"
         >
           Zapisz dane
         </button>
@@ -109,11 +109,10 @@
 </template>
 
 <script setup>
-defineEmits(["showProfileEditMenu", "removeEditChanges", "saveProfile"]);
+defineEmits(["showProfileMenu", "removeProfile", "saveProfile"]);
 
 const props = defineProps({
-  profileEditMenu: Boolean,
+  profileMenu: Boolean,
   profileStorage: Object,
-  editIndex: Number,
 });
 </script>
